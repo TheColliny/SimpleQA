@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Q&A Board</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,500;0,9..40,700;1,9..40,400&family=Fraunces:ital,opsz,wght@0,9..144,700;1,9..144,400&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #f8f7f4; }
+    /* FLIP animation: JS measures positions and applies an inline transform; */
+    /* the transition below smooths it back to identity over 1s. */
+    /* The opacity keyframe dips to 70% mid-move per spec. */
+    @keyframes qaOpacityDip {
+      0%, 100% { opacity: 1; }
+      30%, 70% { opacity: 0.7; }
+    }
+    @keyframes qaSlideIn {
+      from { opacity: 0; transform: translateY(-12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .question-card { will-change: transform, opacity; }
+    .question-card.qa-entering { animation: qaSlideIn 0.4s ease-out; }
+    .vote-btn { transition: all 0.2s ease; }
+    .vote-btn:hover { transform: scale(1.1); }
+    .sort-btn { transition: all 0.15s ease; }
+    .sort-btn:hover { opacity: 0.85; }
+    input:focus, textarea:focus { outline: none; border-color: #1a1a2e !important; box-shadow: 0 0 0 3px rgba(26,26,46,0.08) !important; }
+    textarea::placeholder, input::placeholder { color: #9ca3af; }
+    .submit-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+    .submit-btn:not(:disabled):hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(26,26,46,0.2); }
+    .delete-btn, .answer-btn { opacity: 0; transition: opacity 0.15s ease; }
+    .card-wrap:hover .delete-btn, .card-wrap:hover .answer-btn { opacity: 1; }
+    .qa-action-error { background:#fff1f1; color:#b91c1c; border:1px solid #fecaca; padding:8px 12px; border-radius:8px; margin-bottom:12px; font-size:13px; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script src="ranking.js"></script>
+  <script src="redirect.js"></script>
+  <script src="auth.js"></script>
+  <script src="QA.js"></script>
+</body>
+</html>

@@ -1,0 +1,26 @@
+# Block direct browser access to the data/lock files used by api.php.
+# These files are read/written only by api.php itself.
+
+<FilesMatch "^(data\.json|data\.lock|data\.json\.new\..+)$">
+    # Apache 2.4+
+    Require all denied
+    # Apache 2.2 fallback
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Case-insensitive entry: a manually-typed wrong-case URL (qa.html, Qa.html, qA.html)
+# should still reach the real QA.html. mod_speling auto-corrects case-only typos; it only
+# fires on a 404, so the existing QA.html is served directly and never loops.
+<IfModule mod_speling.c>
+    CheckSpelling On
+    CheckCaseOnly On
+</IfModule>
+
+# Fallback for hosts without mod_speling: explicitly map any casing of "qa.html" to QA.html.
+# The RewriteCond (case-sensitive) excludes the canonical /QA.html so this never loops.
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteCond %{REQUEST_URI} !^/QA\.html$
+    RewriteRule ^[Qq][Aa]\.html$ /QA.html [R=302,L]
+</IfModule>
