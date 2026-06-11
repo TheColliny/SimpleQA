@@ -18,9 +18,13 @@
 </IfModule>
 
 # Fallback for hosts without mod_speling: explicitly map any casing of "qa.html" to QA.html.
-# The RewriteCond (case-sensitive) excludes the canonical /QA.html so this never loops.
+# Subdirectory-safe: the case-sensitive RewriteCond excludes the canonical QA.html in ANY
+# directory (it matches a request path ending in /QA.html), and the target is RELATIVE so the
+# redirect stays in the same directory. This never loops and works under /test/, /qa/, etc.
+# (A naive "^/QA\.html$" guard + "/QA.html" target wrongly redirects /subdir/QA.html to the
+# site root — that bug is what this avoids.)
 <IfModule mod_rewrite.c>
     RewriteEngine On
-    RewriteCond %{REQUEST_URI} !^/QA\.html$
-    RewriteRule ^[Qq][Aa]\.html$ /QA.html [R=302,L]
+    RewriteCond %{REQUEST_URI} !/QA\.html$
+    RewriteRule ^[Qq][Aa]\.html$ QA.html [R=302,L]
 </IfModule>
